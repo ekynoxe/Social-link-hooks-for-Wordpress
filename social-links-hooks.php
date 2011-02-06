@@ -2,7 +2,7 @@
 /* 
 Plugin Name: Social Links Hooks
 Plugin URI: http://www.ekynoxe.com/
-Version: v1.00
+Version: v1.01
 Author: <a href="http://mathieudavy.com/">Mathieu Davy</a>
 Description: A plugin to have available social links to use on your website
  
@@ -45,7 +45,8 @@ if (!class_exists("SocialLinksHooks")) {
 				'facebook'	=> '', 
 				'flickr'	=> '', 
 				'youtube'	=> '',
-				'vimeo'		=> '');
+				'vimeo'		=> '',
+				'skype'		=> '');
 			
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)) {
@@ -96,6 +97,9 @@ if (!class_exists("SocialLinksHooks")) {
 				if (isset($_POST['slh_vimeo'])) {
 					$devOptions['vimeo'] = apply_filters('content_save_pre', $_POST['slh_vimeo']);
 				}
+				if (isset($_POST['slh_skype'])) {
+					$devOptions['skype'] = apply_filters('content_save_pre', $_POST['slh_skype']);
+				}
 				update_option($this->adminOptionsName, $devOptions);
 				
 		?>
@@ -143,6 +147,13 @@ if (!class_exists("SocialLinksHooks")) {
 				<td>
 					<input name="slh_vimeo" type="text" id="social_hooks_vimeo_data"
 					value="<?php _e(apply_filters('format_to_edit',$devOptions['vimeo']), 'SocialLinksHooks') ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" class="skype">Enter your skype url:</th>
+				<td>
+					<input name="slh_skype" type="text" id="social_hooks_skype_data"
+					value="<?php _e(apply_filters('format_to_edit',$devOptions['skype']), 'SocialLinksHooks') ?>" />
 				</td>
 			</tr>
 
