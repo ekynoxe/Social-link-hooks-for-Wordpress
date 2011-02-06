@@ -1,0 +1,18 @@
+#social-links-hooks-form{
+	text-align: left;
+}
+#social-links-hooks-form th{
+	padding-left: 30px;
+	width: 250px;
+}
+#social-links-hooks-form th.twitter{background: transparent url('img/favicon-twitter.png') center left no-repeat;}
+#social-links-hooks-form th.facebook{background: transparent url('img/favicon-facebook.png') center left no-repeat;}
+#social-links-hooks-form th.flickr{background: transparent url('img/favicon-flickr.png') center left no-repeat;}
+#social-links-hooks-form th.youtube{background: transparent url('img/favicon-youtube.png') center left no-repeat;}
+#social-links-hooks-form th.vimeo{background: transparent url('img/favicon-vimeo.png') center left no-repeat;}
+#social-links-hooks-form td{
+	width: 400px;
+}
+#social-links-hooks-form input{
+	width: 380px;
+}
