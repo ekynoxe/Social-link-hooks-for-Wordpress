@@ -46,7 +46,9 @@ if (!class_exists("SocialLinksHooks")) {
 				'flickr'	=> '', 
 				'youtube'	=> '',
 				'vimeo'		=> '',
-				'skype'		=> '');
+				'skype'		=> '',
+				'plusone'	=> '',
+				'linkedin'	=> '');
 			
 			$devOptions = get_option($this->adminOptionsName);
 			if (!empty($devOptions)) {
@@ -99,6 +101,12 @@ if (!class_exists("SocialLinksHooks")) {
 				}
 				if (isset($_POST['slh_skype'])) {
 					$devOptions['skype'] = apply_filters('content_save_pre', $_POST['slh_skype']);
+				}
+				if (isset($_POST['slh_plusone'])) {
+					$devOptions['plusone'] = apply_filters('content_save_pre', $_POST['slh_plusone']);
+				}
+				if (isset($_POST['slh_linkedin'])) {
+					$devOptions['linkedin'] = apply_filters('content_save_pre', $_POST['slh_linkedin']);
 				}
 				update_option($this->adminOptionsName, $devOptions);
 				
@@ -154,6 +162,20 @@ if (!class_exists("SocialLinksHooks")) {
 				<td>
 					<input name="slh_skype" type="text" id="social_hooks_skype_data"
 					value="<?php _e(apply_filters('format_to_edit',$devOptions['skype']), 'SocialLinksHooks') ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" class="plusone">Enter your google plus one url (that functionality will be changed to allow it to also be dynamic):</th>
+				<td>
+					<input name="slh_plusone" type="text" id="social_hooks_plusone_data"
+					value="<?php _e(apply_filters('format_to_edit',$devOptions['plusone']), 'SocialLinksHooks') ?>" />
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" class="linkedin">Enter your linkedin url:</th>
+				<td>
+					<input name="slh_linkedin" type="text" id="social_hooks_linkedin_data"
+					value="<?php _e(apply_filters('format_to_edit',$devOptions['linkedin']), 'SocialLinksHooks') ?>" />
 				</td>
 			</tr>
 
