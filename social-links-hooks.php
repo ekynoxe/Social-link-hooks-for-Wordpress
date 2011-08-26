@@ -33,7 +33,26 @@ if ( ! defined( 'SOCIAL_HOOKS_PLUGIN_URL' ) )
 
 if (!class_exists("SocialLinksHooks")) {
 	class SocialLinksHooks {
+		
 		var $adminOptionsName = "SocialLinksHooksAdminOptions";
+		/* definitions as an array of services, each one being:
+		array(
+			type			=> 'text','checkbox', // This is going to be fed into the type="XXX" of an input tag! Be careful!
+			default_value	=> '','on|off',
+			label			=> 'free text'
+		)
+		*/
+		var $optionsDefinitions = array(
+			'twitter' => array('text','','Enter your twitter url:'),
+			'facebook'	=> array('text','','Enter your facebook url:'),
+			'flickr'	=> array('text','','Enter your flickr url:'),
+			'youtube'	=> array('text','','Enter your youtube url:'),
+			'vimeo'		=> array('text','','Enter your vimeo url:'),
+			'skype'		=> array('text','','Enter your skype url:'),
+			'plusone'	=> array('checkbox',false,"Check this box if you want the +1 button to be activated for the canonical doman of your site (this will only share your site's root url)"),
+			'linkedin'	=> array('text','','Enter your linkedin url:')
+			);
+			
 		function SocialLinksHooks() { //constructor
 		}
 		function init() {
@@ -41,21 +60,12 @@ if (!class_exists("SocialLinksHooks")) {
 		}
 		//Returns an array of admin options
 		function getAdminOptions() {
-			$socialLinksHooksAdminOptions = array('twitter' => '',
-				'facebook'	=> '', 
-				'flickr'	=> '', 
-				'youtube'	=> '',
-				'vimeo'		=> '',
-				'skype'		=> '',
-				'plusone'	=> '',
-				'linkedin'	=> '');
-			
 			$devOptions = get_option($this->adminOptionsName);
+			
 			if (!empty($devOptions)) {
 				foreach ($devOptions as $key => $option)
 					$socialHooksAdminOptions[$key] = $option;
-			}				
-			update_option($this->adminOptionsName, $socialHooksAdminOptions);
+			}
 			return $socialHooksAdminOptions;
 		}
 		
@@ -71,9 +81,15 @@ if (!class_exists("SocialLinksHooks")) {
 			$devOptions = get_option($this->adminOptionsName);
 			
 			foreach ($devOptions as $key => $option){
-				if('' != $option){
-					echo $options['before'] . '<a href="'.$option.'"><img src="'. SOCIAL_HOOKS_PLUGIN_URL.'/css/img/favicon-'.$key.'.png" alt="on '.$key.'">'.($options['show_labels']?$key:'').'</a>'. $options['after'];
-				}
+					if ($key == 'plusone') :
+		?>
+				<g:plusone size="small" annotation="bubble"></g:plusone>
+		<?php
+					else :
+						if('' != $option){
+							echo $options['before'] . '<a href="'.$option.'"><img src="'. SOCIAL_HOOKS_PLUGIN_URL.'/css/img/favicon-'.$key.'.png" alt="on '.$key.'">'.($options['show_labels']?$key:'').'</a>'. $options['after'];
+						}
+					endif;
 			}
 		}
 		
@@ -83,30 +99,26 @@ if (!class_exists("SocialLinksHooks")) {
 			}
 			$devOptions = $this->getAdminOptions();
 
-			if (isset($_POST['update_socialLinksHooksSettings'])) { 
-				if (isset($_POST['slh_twitter'])) {
-					$devOptions['twitter'] = apply_filters('content_save_pre', $_POST['slh_twitter']);
-				}
-				if (isset($_POST['slh_facebook'])) {
-					$devOptions['facebook'] = apply_filters('content_save_pre', $_POST['slh_facebook']);
-				}
-				if (isset($_POST['slh_flickr'])) {
-					$devOptions['flickr'] = apply_filters('content_save_pre', $_POST['slh_flickr']);
-				}
-				if (isset($_POST['slh_youtube'])) {
-					$devOptions['youtube'] = apply_filters('content_save_pre', $_POST['slh_youtube']);
-				}
-				if (isset($_POST['slh_vimeo'])) {
-					$devOptions['vimeo'] = apply_filters('content_save_pre', $_POST['slh_vimeo']);
-				}
-				if (isset($_POST['slh_skype'])) {
-					$devOptions['skype'] = apply_filters('content_save_pre', $_POST['slh_skype']);
-				}
-				if (isset($_POST['slh_plusone'])) {
-					$devOptions['plusone'] = apply_filters('content_save_pre', $_POST['slh_plusone']);
-				}
-				if (isset($_POST['slh_linkedin'])) {
-					$devOptions['linkedin'] = apply_filters('content_save_pre', $_POST['slh_linkedin']);
+			if (isset($_POST['update_socialLinksHooksSettings'])) {
+				
+				foreach($this->optionsDefinitions as $key => $def){
+					switch($def[0]){
+						case 'text':
+							if (isset($_POST['slh_'.$key])) {
+								$new_value = $_POST['slh_'.$key];
+							}
+						break;
+						case 'checkbox':
+							
+							if (isset($_POST['slh_'.$key])) {
+								$new_value = $_POST['slh_'.$key];
+							} else {
+								$new_value = '';
+							}
+						break;
+					}
+					
+					$devOptions[$key] = apply_filters('content_save_pre', $new_value);
 				}
 				update_option($this->adminOptionsName, $devOptions);
 				
@@ -117,68 +129,40 @@ if (!class_exists("SocialLinksHooks")) {
 		?>
 		<div class="wrap">
 		<h2>Social Links Hooks Options Page</h2>
-
+		
 		<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
 		<?php wp_nonce_field('update-options'); ?>
-
+		
 		<table id="social-links-hooks-form">
-			<tr valign="top">
-				<th scope="row" class="twitter">Enter your twitter url:</th>
-				<td>
-					<input name="slh_twitter" type="text" id="social_hooks_twitter_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['twitter']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="facebook">Enter your facebook url:</th>
-				<td>
-					<input name="slh_facebook" type="text" id="social_hooks_facebook_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['facebook']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="flickr">Enter your flickr url:</th>
-				<td>
-					<input name="slh_flickr" type="text" id="social_hooks_flickr_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['flickr']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="youtube">Enter your youtube url:</th>
-				<td>
-					<input name="slh_youtube" type="text" id="social_hooks_youtube_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['youtube']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="vimeo">Enter your vimeo url:</th>
-				<td>
-					<input name="slh_vimeo" type="text" id="social_hooks_vimeo_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['vimeo']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="skype">Enter your skype url:</th>
-				<td>
-					<input name="slh_skype" type="text" id="social_hooks_skype_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['skype']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="plusone">Enter your google plus one url (that functionality will be changed to allow it to also be dynamic):</th>
-				<td>
-					<input name="slh_plusone" type="text" id="social_hooks_plusone_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['plusone']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="linkedin">Enter your linkedin url:</th>
-				<td>
-					<input name="slh_linkedin" type="text" id="social_hooks_linkedin_data"
-					value="<?php _e(apply_filters('format_to_edit',$devOptions['linkedin']), 'SocialLinksHooks') ?>" />
-				</td>
-			</tr>
-
+			
+			<?php
+			foreach($this->optionsDefinitions as $key => $def) :
+			?>
+					<tr valign="top">
+						<th scope="row" class="<?php echo $key; ?>"><?php echo $def[2]; ?></th>
+						<td>
+			<?php
+			
+				switch($def[0]){
+					case 'text':
+			?>
+					<input name="slh_<?php echo $key; ?>" type="<?php echo $def[0]; ?>" id="social_hooks_<?php echo $key; ?>_data"
+					value="<?php _e(apply_filters('format_to_edit',$devOptions[$key]), 'SocialLinksHooks') ?>" />
+			<?php
+					break;
+					case 'checkbox':
+			?>
+					<input name="slh_<?php echo $key; ?>" type="checkbox" id="social_hooks_<?php echo $key; ?>_data"
+					<?php if($devOptions[$key]) { echo 'checked="checked"'; } ?> />
+			<?php
+					break;
+				}
+			?>
+						</td>
+					</tr>
+			<?php
+			endforeach;
+			?>
 		</table>
 
 		<input type="hidden" name="update_socialLinksHooksSettings" value="update" />
@@ -225,4 +209,13 @@ function admin_register_head() {
 	echo "<link rel='stylesheet' type='text/css' href='$url' />\n";
 }
 add_action('admin_head', 'admin_register_head');
+
+function register_head() {
+	/*
+	HERE WE NEED TO CHECK IF ANY OF THE GOOGLE PLUS OPTION IS ACTIVE TO INCLUDE THE SCRIPT TAG
+	ADDING BY DEFAULT FOR NOW
+	*/
+	echo '<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>';
+}
+add_action('wp_head', 'register_head');
 ?>
