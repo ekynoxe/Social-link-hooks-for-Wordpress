@@ -79,15 +79,18 @@ if (!class_exists("SocialLinksHooks")) {
 				$options['show_labels'] = true;
 				
 			$devOptions = get_option($this->adminOptionsName);
-			
+			if(isset($devOptions['plusone']) and $devOptions['plusone'] == 'on') {
+
+?>
+		<div id="plusonebutton"><g:plusone size="medium" annotation="bubble"></g:plusone></div>
+<?php
+			}
 			foreach ($devOptions as $key => $option){
 					if ($key == 'plusone') :
-		?>
-				<g:plusone size="small" annotation="bubble"></g:plusone>
-		<?php
+						continue;
 					else :
 						if('' != $option){
-							echo $options['before'] . '<a href="'.$option.'"><img src="'. SOCIAL_HOOKS_PLUGIN_URL.'/css/img/favicon-'.$key.'.png" alt="on '.$key.'">'.($options['show_labels']?$key:'').'</a>'. $options['after'];
+							echo $options['before'] . '<a target="blank" href="'.$option.'"><img src="'. SOCIAL_HOOKS_PLUGIN_URL.'/css/img/'.$key.'.png" alt="on '.$key.'">'.($options['show_labels']?$key:'').'</a>'. $options['after'];
 						}
 					endif;
 			}

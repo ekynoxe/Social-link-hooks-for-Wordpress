@@ -5,13 +5,13 @@
 	padding-left: 30px;
 	width: 250px;
 }
-#social-links-hooks-form th.twitter{background: transparent url('img/favicon-twitter.png') center left no-repeat;}
-#social-links-hooks-form th.facebook{background: transparent url('img/favicon-facebook.png') center left no-repeat;}
-#social-links-hooks-form th.flickr{background: transparent url('img/favicon-flickr.png') center left no-repeat;}
-#social-links-hooks-form th.youtube{background: transparent url('img/favicon-youtube.png') center left no-repeat;}
-#social-links-hooks-form th.vimeo{background: transparent url('img/favicon-vimeo.png') center left no-repeat;}
-#social-links-hooks-form th.skype{background: transparent url('img/favicon-skype.png') center left no-repeat;}
-#social-links-hooks-form th.linkedin{background: transparent url('img/favicon-linkedin.png') center left no-repeat;}
+#social-links-hooks-form th.twitter{background: transparent url('img/twitter.png') center left no-repeat;}
+#social-links-hooks-form th.facebook{background: transparent url('img/facebook.png') center left no-repeat;}
+#social-links-hooks-form th.flickr{background: transparent url('img/flickr.png') center left no-repeat;}
+#social-links-hooks-form th.youtube{background: transparent url('img/youtube.png') center left no-repeat;}
+#social-links-hooks-form th.vimeo{background: transparent url('img/vimeo.png') center left no-repeat;}
+#social-links-hooks-form th.skype{background: transparent url('img/skype.png') center left no-repeat;}
+#social-links-hooks-form th.linkedin{background: transparent url('img/linkedin.png') center left no-repeat;}
 #social-links-hooks-form th.plusone{background: transparent url('img/favicon-plusone.png') center left no-repeat;}
 #social-links-hooks-form td{
 	width: 400px;
